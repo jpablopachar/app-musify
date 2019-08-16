@@ -1,2 +1,2 @@
 # app-musify
-Simulación de una aplicación tipo Spotify con MongoDB, NodeJS y Angular 7
+Simulación de una aplicación tipo Spotify con MongoDB, NodeJS y Angular 8
