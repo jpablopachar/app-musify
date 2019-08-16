@@ -1,4 +1,5 @@
 import '@babel/polyfill';
+import { config } from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -6,10 +7,12 @@ import multer from 'multer';
 
 import path from 'path';
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+import usuarioRoutes from './routes/usuarioRoutes';
 
+if (process.env.NODE_ENV !== 'production') {
+  // require('dotenv').config();
+  config();
+}
 
 require('./db/database');
 
@@ -29,8 +32,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, 'public/uploads'),
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime() + path.extname(file.originalname));
+  },
+});
+
+app.use(multer({ storage }).single('imagen'));
+
 /*                    Rutas                     */
-// app.use('/', indexRoutes);
+app.use('/api', usuarioRoutes);
 
 async function main() {
   await app.listen(app.get('port'));
